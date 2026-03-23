@@ -572,46 +572,44 @@ export async function ingestResendEvent(event: WebhookEventPayload) {
       }),
     );
 
-    await db().transaction(async (tx) => {
-      await tx.insert(messages).values({
-        id: messageId,
-        mailboxId: mailbox.id,
-        providerEmailId,
-        source: "resend",
-        messageIdHeader: fullEmail.message_id,
-        subject: fullEmail.subject,
-        snippet: extractSnippet(fullEmail.text, fullEmail.html),
-        fromName: parsedFrom.name,
-        fromEmail: parsedFrom.email,
-        replyTo: fullEmail.reply_to ?? [],
-        toAddresses: fullEmail.to,
-        ccAddresses: fullEmail.cc ?? [],
-        bccAddresses: fullEmail.bcc ?? [],
-        headers: fullEmail.headers,
-        textBody: fullEmail.text,
-        htmlBody: fullEmail.html,
-        hasAttachments: attachmentRecords.length > 0,
-        receivedAt: new Date(fullEmail.created_at),
-      });
+    await db().insert(messages).values({
+      id: messageId,
+      mailboxId: mailbox.id,
+      providerEmailId,
+      source: "resend",
+      messageIdHeader: fullEmail.message_id,
+      subject: fullEmail.subject,
+      snippet: extractSnippet(fullEmail.text, fullEmail.html),
+      fromName: parsedFrom.name,
+      fromEmail: parsedFrom.email,
+      replyTo: fullEmail.reply_to ?? [],
+      toAddresses: fullEmail.to,
+      ccAddresses: fullEmail.cc ?? [],
+      bccAddresses: fullEmail.bcc ?? [],
+      headers: fullEmail.headers,
+      textBody: fullEmail.text,
+      htmlBody: fullEmail.html,
+      hasAttachments: attachmentRecords.length > 0,
+      receivedAt: new Date(fullEmail.created_at),
+    });
 
-      if (attachmentRecords.length > 0) {
-        await tx.insert(attachments).values(attachmentRecords);
-      }
+    if (attachmentRecords.length > 0) {
+      await db().insert(attachments).values(attachmentRecords);
+    }
 
-      await tx
-        .update(mailboxes)
-        .set({ lastReceivedAt: new Date(fullEmail.created_at) })
-        .where(eq(mailboxes.id, mailbox.id));
+    await db()
+      .update(mailboxes)
+      .set({ lastReceivedAt: new Date(fullEmail.created_at) })
+      .where(eq(mailboxes.id, mailbox.id));
 
-      await tx.insert(ingestEvents).values({
-        id: makeId(),
-        provider: "resend",
-        providerEmailId,
-        recipientAddress,
-        status: "stored",
-        payload: event as unknown as Record<string, unknown>,
-        processedAt: new Date(),
-      });
+    await db().insert(ingestEvents).values({
+      id: makeId(),
+      provider: "resend",
+      providerEmailId,
+      recipientAddress,
+      status: "stored",
+      payload: event as unknown as Record<string, unknown>,
+      processedAt: new Date(),
     });
 
     return { stored: true, reason: "stored" };
