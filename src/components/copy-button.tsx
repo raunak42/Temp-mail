@@ -8,7 +8,7 @@ type CopyButtonProps = {
   label?: string;
 };
 
-export function CopyButton({ value, label = "Copy" }: CopyButtonProps) {
+export function CopyButton({ value, label = "Copy address" }: CopyButtonProps) {
   const [copied, setCopied] = useState(false);
 
   async function handleCopy() {
@@ -18,11 +18,7 @@ export function CopyButton({ value, label = "Copy" }: CopyButtonProps) {
   }
 
   return (
-    <button
-      type="button"
-      onClick={handleCopy}
-      className="inline-flex items-center gap-2 rounded-full border border-[var(--line)] bg-[var(--surface)] px-3 py-1.5 text-sm font-medium text-[var(--ink)] transition duration-200 hover:border-[var(--line-strong)] hover:bg-[var(--surface-strong)]"
-    >
+    <button type="button" onClick={handleCopy} className="button-secondary">
       {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
       <span>{copied ? "Copied" : label}</span>
     </button>

@@ -1,27 +1,29 @@
 import type { Metadata } from "next";
-import {
-  IBM_Plex_Mono,
-  Instrument_Sans,
-  Sora,
-} from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { env } from "@/lib/env";
 
-const display = Sora({
-  variable: "--font-ui-display",
-  subsets: ["latin"],
-});
-
-const body = Instrument_Sans({
+const sans = Geist({
   variable: "--font-ui-body",
   subsets: ["latin"],
 });
 
-const mono = IBM_Plex_Mono({
+const mono = Geist_Mono({
   variable: "--font-ui-code",
   subsets: ["latin"],
-  weight: ["400", "500"],
 });
+
+const themeBootScript = `
+(() => {
+  const storageKey = "mailroom-theme";
+  const root = document.documentElement;
+  const saved = window.localStorage.getItem(storageKey);
+  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const theme = saved === "light" || saved === "dark" ? saved : prefersDark ? "dark" : "light";
+  root.dataset.theme = theme;
+  root.style.colorScheme = theme;
+})();
+`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(env.appUrl),
@@ -41,9 +43,13 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${display.variable} ${body.variable} ${mono.variable} h-full antialiased`}
+      suppressHydrationWarning
+      className={`${sans.variable} ${mono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full">
+        <script dangerouslySetInnerHTML={{ __html: themeBootScript }} />
+        {children}
+      </body>
     </html>
   );
 }
