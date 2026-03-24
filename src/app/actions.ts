@@ -4,7 +4,12 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { clearSession, createSession, requireSession, verifyPassword } from "@/lib/auth";
 import { env, hasCoreConfig } from "@/lib/env";
-import { createMailbox, seedDemoMessage, toggleMailboxStatus } from "@/lib/mailboxes";
+import {
+  createMailbox,
+  deleteMailbox,
+  seedDemoMessage,
+  toggleMailboxStatus,
+} from "@/lib/mailboxes";
 
 export type ActionState = {
   error: string | null;
@@ -107,4 +112,19 @@ export async function demoIngestAction(formData: FormData) {
   await seedDemoMessage(mailboxId);
   revalidatePath("/", "layout");
   redirect(redirectTo);
+}
+
+export async function deleteMailboxAction(formData: FormData) {
+  await requireSession();
+
+  const mailboxId = String(formData.get("mailboxId") ?? "");
+  const redirectTo = String(formData.get("redirectTo") ?? "/");
+
+  if (!mailboxId) {
+    redirect(redirectTo);
+  }
+
+  await deleteMailbox(mailboxId);
+  revalidatePath("/", "layout");
+  redirect(redirectTo || "/");
 }

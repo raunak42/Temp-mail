@@ -70,10 +70,6 @@ function sanitizeFilename(input: string | null | undefined) {
   return value.replace(/[^a-zA-Z0-9._-]+/g, "-");
 }
 
-function mailboxOrderExpression() {
-  return sql`coalesce(max(${messages.receivedAt}), ${mailboxes.createdAt})`;
-}
-
 async function getMailboxById(mailboxId: string) {
   const [mailbox] = await db()
     .select()
@@ -166,6 +162,16 @@ export async function toggleMailboxStatus(mailboxId: string) {
   return nextStatus;
 }
 
+export async function deleteMailbox(mailboxId: string) {
+  const mailbox = await getMailboxById(mailboxId);
+
+  if (!mailbox) {
+    throw new Error("Mailbox not found.");
+  }
+
+  await db().delete(mailboxes).where(eq(mailboxes.id, mailboxId));
+}
+
 export async function listMailboxes() {
   const rows = await db()
     .select({
@@ -184,7 +190,7 @@ export async function listMailboxes() {
     .from(mailboxes)
     .leftJoin(messages, eq(messages.mailboxId, mailboxes.id))
     .groupBy(mailboxes.id)
-    .orderBy(desc(mailboxOrderExpression()));
+    .orderBy(desc(mailboxes.createdAt), desc(mailboxes.id));
 
   return rows.map((row) => ({
     ...row,

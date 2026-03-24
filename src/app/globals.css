@@ -202,7 +202,8 @@ summary::-webkit-details-marker {
 
 .button-primary,
 .button-secondary,
-.button-ghost {
+.button-ghost,
+.button-danger {
   display: inline-flex;
   min-height: 2.75rem;
   align-items: center;
@@ -243,6 +244,17 @@ summary::-webkit-details-marker {
   border: 1px solid transparent;
   background: transparent;
   color: var(--muted-strong);
+}
+
+.button-danger {
+  border: 1px solid var(--danger-line);
+  background: color-mix(in oklch, var(--danger-surface) 92%, transparent);
+  color: var(--danger-ink);
+}
+
+.button-danger:hover {
+  border-color: color-mix(in oklch, var(--danger-line) 86%, var(--line-strong));
+  background: color-mix(in oklch, var(--danger-surface) 78%, transparent);
 }
 
 .eyebrow {

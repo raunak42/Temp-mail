@@ -12,9 +12,11 @@ import {
   Paperclip,
   Search,
   Sparkles,
+  Trash2,
 } from "lucide-react";
 import {
   demoIngestAction,
+  deleteMailboxAction,
   logoutAction,
   toggleMailboxStatusAction,
 } from "@/app/actions";
@@ -276,6 +278,18 @@ export async function MailboxWorkspacePage({
                   </button>
                 </form>
               ) : null}
+              <form action={deleteMailboxAction}>
+                <input
+                  type="hidden"
+                  name="mailboxId"
+                  value={data.selectedMailbox.id}
+                />
+                <input type="hidden" name="redirectTo" value="/" />
+                <button type="submit" className="button-danger">
+                  <Trash2 className="h-4 w-4" />
+                  Delete mailbox
+                </button>
+              </form>
             </div>
           </div>
         </section>
