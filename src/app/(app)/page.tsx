@@ -1,22 +1,13 @@
-import { DashboardPage } from "@/components/dashboard-page";
+import { OverviewPage } from "@/components/dashboard-page";
 
 export const dynamic = "force-dynamic";
 
 type HomePageProps = {
-  searchParams: Promise<{
-    message?: string;
-    q?: string;
-  }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 
 export default async function HomePage({ searchParams }: HomePageProps) {
-  const params = await searchParams;
+  await searchParams;
 
-  return (
-    <DashboardPage
-      currentPath="/"
-      messageId={params.message}
-      searchQuery={params.q}
-    />
-  );
+  return <OverviewPage />;
 }

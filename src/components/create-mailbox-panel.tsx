@@ -4,7 +4,6 @@ import { useActionState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { createMailboxAction, type ActionState } from "@/app/actions";
-import { env } from "@/lib/env";
 
 function SubmitButton() {
   return (
@@ -31,19 +30,15 @@ export function CreateMailboxPanel() {
   }, [router, state.mailboxId]);
 
   return (
-    <section className="panel-muted p-4">
-      <div className="mb-4 flex items-start justify-between gap-3">
-        <div className="space-y-1.5">
-          <p className="eyebrow">Mailbox control</p>
-          <h2 className="text-lg font-medium tracking-[-0.03em] text-[var(--ink)]">
-            Generate a fresh address
-          </h2>
-          <p className="max-w-[34ch] text-sm leading-6 text-[var(--muted)]">
-            One click creates an isolated inbox. Use the advanced section only
-            when you need a memorable alias.
-          </p>
-        </div>
-        <span className="chip hidden sm:inline-flex">{env.emailDomain}</span>
+    <section>
+      <div className="mb-4 space-y-1.5">
+        <p className="eyebrow">Create mailbox</p>
+        <h2 className="text-lg font-medium tracking-[-0.03em] text-[var(--ink)]">
+          New inbox address
+        </h2>
+        <p className="max-w-[34ch] text-sm leading-6 text-[var(--muted)]">
+          Generate instantly, then open its dedicated workspace.
+        </p>
       </div>
 
       <form action={formAction} className="space-y-3">
@@ -56,7 +51,7 @@ export function CreateMailboxPanel() {
           />
         </label>
 
-        <details className="group panel-strong px-4 py-3">
+        <details className="group rounded-[var(--radius-card)] border border-[var(--line)] bg-[var(--surface-muted)] px-4 py-3">
           <summary className="cursor-pointer list-none text-sm font-medium text-[var(--ink)]">
             Advanced alias setup
           </summary>

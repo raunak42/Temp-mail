@@ -1,4 +1,4 @@
-import { DashboardPage } from "@/components/dashboard-page";
+import { MailboxWorkspacePage } from "@/components/dashboard-page";
 
 export const dynamic = "force-dynamic";
 
@@ -19,8 +19,7 @@ export default async function MailboxPage({
   const [{ mailboxId }, query] = await Promise.all([params, searchParams]);
 
   return (
-    <DashboardPage
-      currentPath={`/mailboxes/${mailboxId}`}
+    <MailboxWorkspacePage
       mailboxId={mailboxId}
       messageId={query.message}
       searchQuery={query.q}

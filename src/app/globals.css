@@ -33,9 +33,10 @@
   --shadow-soft: 0 10px 28px rgba(15, 23, 42, 0.05);
   --shadow-panel: 0 24px 56px rgba(15, 23, 42, 0.08);
   --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.66);
-  --radius-panel: 1.25rem;
-  --radius-card: 1rem;
-  --radius-control: 0.8rem;
+  --radius-panel: 0.85rem;
+  --radius-card: 0.65rem;
+  --radius-control: 0.48rem;
+  --radius-chip: 0.42rem;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -257,7 +258,7 @@ summary::-webkit-details-marker {
   min-height: 1.85rem;
   align-items: center;
   gap: 0.45rem;
-  border-radius: 999px;
+  border-radius: var(--radius-chip);
   border: 1px solid var(--line);
   background: color-mix(in oklch, var(--surface-muted) 92%, transparent);
   padding: 0.35rem 0.7rem;

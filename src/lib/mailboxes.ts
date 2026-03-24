@@ -227,10 +227,16 @@ export async function getDashboardData(
   mailboxId?: string,
   searchQuery = "",
   selectedMessageId?: string,
+  options?: {
+    autoSelectFirstMailbox?: boolean;
+  },
 ): Promise<DashboardData> {
   const [mailboxItems, stats] = await Promise.all([listMailboxes(), getStats()]);
+  const autoSelectFirstMailbox = options?.autoSelectFirstMailbox ?? true;
   const selectedMailbox =
-    mailboxItems.find((item) => item.id === mailboxId) ?? mailboxItems[0] ?? null;
+    mailboxItems.find((item) => item.id === mailboxId) ??
+    (autoSelectFirstMailbox ? mailboxItems[0] : null) ??
+    null;
 
   if (!selectedMailbox) {
     return {
