@@ -150,6 +150,14 @@ export async function OverviewPage() {
                       </div>
                       <div className="flex items-center justify-between gap-2">
                         <span className="uppercase tracking-[0.15em] text-[var(--muted-strong)]">
+                          Created
+                        </span>
+                        <span className="truncate text-right">
+                          {format(mailbox.createdAt, "dd MMM yyyy, HH:mm")}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="uppercase tracking-[0.15em] text-[var(--muted-strong)]">
                           Last mail
                         </span>
                         <span className="truncate text-right">
@@ -242,6 +250,11 @@ export async function MailboxWorkspacePage({
               <p className="mt-1 truncate font-mono text-[0.8rem] text-[var(--muted)]">
                 {data.selectedMailbox.emailAddress}
               </p>
+              <div className="mt-3 flex flex-wrap items-center gap-2">
+                <span className="chip">
+                  Created {formatWhen(data.selectedMailbox.createdAt)}
+                </span>
+              </div>
               <p className="mt-3 max-w-[60ch] text-sm leading-7 text-[var(--muted)]">
                 {data.selectedMailbox.notes ||
                   "This mailbox keeps all incoming mail until you archive it."}
